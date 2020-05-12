@@ -1,9 +1,10 @@
-import spacy
-import numpy as np
 import asyncio
-import websockets
 import json
 import time
+
+import numpy as np
+import spacy
+import websockets
 from thinc.neural.util import get_array_module
 
 nlp = spacy.load('en_core_web_md')
@@ -14,28 +15,28 @@ print('Spacy Loaded')
 # pca = PCA(n_components=10)
 # pca.fit(difference_matrix)
 
-def n_most_similar(nlp, queries, *, n_closest=1, batch_size=1024):
-    xp = get_array_module(nlp.data)
+# def n_most_similar(nlp, queries, *, n_closest=1, batch_size=1024):
+#     xp = get_array_module(nlp.data)
 
-    unit_vectors = nlp.data / xp.linalg.norm(
-        nlp.data, axis=1, keepdims=True
-    )  # unit normalize all vectors
+#     unit_vectors = nlp.data / xp.linalg.norm(
+#         nlp.data, axis=1, keepdims=True
+#     )  # unit normalize all vectors
 
-    similars = xp.dot(
-        queries, unit_vectors.T
-    ).flatten()  # cos_sim = dot(a, b)/(norm(a)*norm(b))
-    #         similars.shape (200000,)
-    n_closest_idx = np.argpartition(similars, -n_closest)[-n_closest:]  # [n,..., N]
-    scores = similars[n_closest_idx]
+#     similars = xp.dot(
+#         queries, unit_vectors.T
+#     ).flatten()  # cos_sim = dot(a, b)/(norm(a)*norm(b))
+#     #         similars.shape (200000,)
+#     n_closest_idx = np.argpartition(similars, -n_closest)[-n_closest:]  # [n,..., N]
+#     scores = similars[n_closest_idx]
 
-    xp = get_array_module(nlp.data)
+#     xp = get_array_module(nlp.data)
 
-    row2key = {row: key for key, row in nlp.key2row.items()}
+#     row2key = {row: key for key, row in nlp.key2row.items()}
 
-    keys = xp.asarray([row2key[row] for row in n_closest_idx], dtype="uint64")
+#     keys = xp.asarray([row2key[row] for row in n_closest_idx], dtype="uint64")
 
-    scores, keys = zip(*sorted(zip(scores, keys), reverse=True))
-    return scores, keys
+#     scores, keys = zip(*sorted(zip(scores, keys), reverse=True))
+#     return scores, keys
 
 
 async def operation(websocket, path):

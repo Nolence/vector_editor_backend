@@ -1,4 +1,4 @@
 {
-  "python.pythonPath": "C:\\Users\\rexma\\.virtualenvs\\back_end-QodIbA_5\\Scripts\\python.exe",
+  "python.pythonPath": "/usr/bin/python3",
   "python.formatting.provider": "black"
 }
